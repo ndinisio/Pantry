@@ -4,6 +4,18 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.2 — Name the nested-folder case in troubleshooting
+
+**Changed**
+
+- The troubleshooting section now states exactly what `Pantry/` should contain — eight
+  folders and no loose files — and names the nested `Pantry/Pantry/` case, which is what
+  you get when an Xcode-generated source folder is copied in one level too deep. That
+  variant is committed rather than untracked, so `git status` comes back clean and the
+  duplicate looks like it must be in the repository when it is not.
+
+---
+
 ## v1.1 — Document the synchronized-group build failure
 
 **Added**

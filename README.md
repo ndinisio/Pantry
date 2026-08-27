@@ -426,10 +426,24 @@ find Pantry -name 'PantryApp.swift'
 A clean checkout returns nothing from the second command, and exactly
 `Pantry/App/PantryApp.swift` from the third.
 
-**Fix.** Delete the template leftovers — not the versioned files. In this repository the
-app lives in subfolders (`Pantry/App/`, `Pantry/Models/`, `Pantry/Views/`, …) and
-**nothing sits directly in `Pantry/`**, so anything loose at the top level of that folder
-is a leftover. The usual set:
+**Fix.** Delete the template leftovers — not the versioned files. In this repository
+`Pantry/` contains **exactly eight folders and no loose files**:
+
+```
+Pantry/App  Pantry/Components  Pantry/Intents  Pantry/Models
+Pantry/Resources  Pantry/Services  Pantry/Utilities  Pantry/Views
+```
+
+Anything else at that level is a leftover — including a **nested `Pantry/Pantry/`**,
+which is what you get when an Xcode-generated source folder is copied or dragged in one
+level too deep. That whole folder can go:
+
+```bash
+git rm -r "Pantry/Pantry"        # if it is tracked (git status is clean)
+rm -rf "Pantry/Pantry"           # if it is untracked (git status shows it as ??)
+```
+
+If the leftovers are loose files rather than a nested folder, the usual set is:
 
 ```
 Pantry/PantryApp.swift          ← delete (the real one is Pantry/App/PantryApp.swift)
