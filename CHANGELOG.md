@@ -4,6 +4,62 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.8 — One project, and a widget that actually ships
+
+**Fixed**
+
+- There were two Pantry Xcode projects. The second was an untouched copy of the Xcode
+  SwiftData template (`ContentView.swift`, `Item.swift`) sitting in
+  `~/Desktop/pantry-template-backup`, which is why Xcode's Open Recent and DerivedData
+  both listed "Pantry" twice. It has been moved to the Trash — nothing in it came from
+  this app. A third ghost was still cached: DerivedData for
+  `Pantry/Pantry.xcodeproj`, the nested project removed back in v1.3. That cache is
+  gone too, so one project now maps to one build folder.
+
+- `PantryWidgets/` was not in the project at all. No target referenced it, so the widget
+  never compiled and never shipped — the folder was documentation, not code. It is now a
+  real widget extension target: `PantryWidgets.appex`, embedded in the app under
+  `PlugIns/`, with the app depending on it so a plain build produces both.
+
+**Changed**
+
+- `WidgetSnapshotStore` moved to a new top-level `Shared/` folder, which is compiled into
+  both the app and the widget. Previously it lived inside the app target, where the
+  widget could not have reached it. Sharing is now visible in the directory layout rather
+  than hidden in a target membership checkbox. `WidgetSnapshotBuilder` stays in the app —
+  it reads SwiftData, which the extension has no business doing.
+
+- The App Group is declared in checked-in entitlements files for both targets rather than
+  being a manual Signing & Capabilities step. `Pantry/Pantry.entitlements` and
+  `PantryWidgets/PantryWidgets.entitlements` both carry `group.com.ndinisio.Pantry`, and
+  `WidgetSnapshotStore.appGroupIdentifier` matches. The README's four-step "create the
+  widget target yourself" instructions are gone, because there is nothing left to do.
+
+- Bundle identifiers are consistent. The app had been changed to `com.ndinisio.Pantry`
+  but the two test targets were still on the old `com.pantryapp.` prefix; they now match
+  the app, and the widget is `com.ndinisio.Pantry.PantryWidgets`.
+
+**Added**
+
+- `Pantry/Resources/PrivacyInfo.xcprivacy`. Apple has required a privacy manifest for App
+  Store submission since 2024 and the project had none. It declares no tracking and no
+  collected data, and gives the required reason for the one covered API the app touches —
+  `UserDefaults`, reason `CA92.1`, access confined to the app and its own group.
+
+- `Pantry/Resources/Localizable.xcstrings`, an empty string catalog. The code already
+  routes user-facing text through `String(localized:)` and the project already sets
+  `SWIFT_EMIT_LOC_STRINGS`, but there was nowhere for those strings to land.
+
+**Notes**
+
+- `Info.plist` inside a synchronized folder needs an explicit
+  `PBXFileSystemSynchronizedBuildFileExceptionSet`, otherwise the folder copies it as a
+  resource while Info.plist processing writes the same path — the "Multiple commands
+  produce" failure the README already documents, in a new place. The exception set is on
+  the `PantryWidgets` group.
+
+---
+
 ## v1.7 — Choose which nutrients to show
 
 **Added**

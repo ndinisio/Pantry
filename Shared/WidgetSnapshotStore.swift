@@ -31,14 +31,14 @@ struct WidgetSnapshot: Codable, Equatable, Sendable {
 
 /// Reads and writes the snapshot in the shared app group container.
 ///
-/// The app group has to be added in Xcode under Signing & Capabilities for both the
-/// app and the widget target — it cannot be set up from source. Until it is, this
-/// falls back to standard defaults so the app never fails because a widget isn't
-/// configured; the widget then shows its placeholder.
+/// This type is compiled into both the app and the widget extension, which is why it
+/// lives in `Shared/` rather than under either target. If the app group is ever
+/// unavailable — a provisioning profile without it, say — this falls back to standard
+/// defaults so the app still runs and the widget simply shows its placeholder.
 enum WidgetSnapshotStore {
 
-    /// Change this if you use a different app group identifier.
-    static let appGroupIdentifier = "group.com.pantryapp.Pantry"
+    /// Must match the App Group in `Pantry.entitlements` and `PantryWidgets.entitlements`.
+    static let appGroupIdentifier = "group.com.ndinisio.Pantry"
     static let widgetKind = "PantryStatusWidget"
 
     private static let key = "widget.snapshot"

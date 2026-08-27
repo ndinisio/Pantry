@@ -94,14 +94,31 @@ under `Pantry/` puts it in the target automatically — no project-file edit nee
 
 ## Steps you need to do in Xcode
 
-These are the things it would be reckless to generate from source, because they involve
-signing, capabilities or project structure that Xcode owns. Each is optional; the app
-builds and runs without any of them.
+The project builds, runs, and embeds its widget as it stands — there is no manual target
+setup left to do. Two things are tied to a specific Apple Developer account rather than
+to the source, so change them if you are not using the account this was set up with.
 
-### 1. Signing (required to run on a device)
+### 1. Signing and identifiers
 
-Select the **Pantry** target → **Signing & Capabilities** → choose your team. The
-placeholder bundle identifier is `com.pantryapp.Pantry`; change it to your own.
+Signing is configured for team `GJ249953UM`, with:
+
+| | |
+|---|---|
+| App | `com.ndinisio.Pantry` |
+| Widget extension | `com.ndinisio.Pantry.PantryWidgets` |
+| App Group | `group.com.ndinisio.Pantry` |
+
+To use your own account, change **Team** on all four targets and replace the prefix in
+each of these three places:
+
+1. `PRODUCT_BUNDLE_IDENTIFIER` for **Pantry**, **PantryWidgets**, **PantryTests** and
+   **PantryUITests**
+2. `Pantry/Pantry.entitlements` and `PantryWidgets/PantryWidgets.entitlements`
+3. `WidgetSnapshotStore.appGroupIdentifier` in `Shared/WidgetSnapshotStore.swift`
+
+The App Group has to match across all three. If it does not, nothing crashes —
+`WidgetSnapshotStore` falls back to standard defaults, so the app behaves normally and
+the widget simply shows its placeholder.
 
 ### 2. App icon
 
@@ -109,26 +126,7 @@ placeholder bundle identifier is `com.pantryapp.Pantry`; change it to your own.
 a 1024×1024 image in via Xcode's asset catalog editor. No icon has been generated or
 fetched from anywhere.
 
-### 3. The widget extension
-
-The widget's code is written and complete in `PantryWidgets/`, but a widget extension is
-a separate target with its own bundle identifier and an App Group capability, and that
-has to be created in Xcode:
-
-1. **File → New → Target → Widget Extension**, name it `PantryWidgets`, uncheck
-   "Include Live Activity" and "Include Configuration App Intent". Delete the template
-   files it generates.
-2. Add the existing files in `PantryWidgets/` to the new target.
-3. Add `Pantry/Services/Widget/WidgetSnapshotStore.swift` to the **widget target's**
-   membership as well — both sides read the same snapshot type.
-4. **Signing & Capabilities → + Capability → App Groups** on *both* the app and the
-   widget target, and add `group.com.pantryapp.Pantry` (or your own identifier, which
-   you then change in `WidgetSnapshotStore.appGroupIdentifier`).
-
-Until step 4 is done the app still works — `WidgetSnapshotStore` falls back to standard
-defaults and the widget shows its placeholder rather than failing.
-
-### 4. Notifications and camera
+### 3. Notifications and camera
 
 Both permission strings are already generated into Info.plist by the build settings
 (`INFOPLIST_KEY_NSCameraUsageDescription`, `INFOPLIST_KEY_NSPhotoLibraryUsageDescription`).
@@ -138,6 +136,27 @@ Scan, notifications when you switch a reminder on — never at launch.
 ---
 
 ## Architecture
+
+Four targets, and one folder per target at the repository root. Each of those folders is
+a **synchronized group**: Xcode compiles whatever is inside it, so adding a file is a
+matter of saving it in the right directory — there is no membership to maintain.
+
+```
+Pantry.xcodeproj
+├── Pantry/          → Pantry.app
+├── PantryWidgets/   → PantryWidgets.appex, embedded in the app
+├── Shared/          → compiled into BOTH of the above
+├── PantryTests/     → PantryTests.xctest
+└── PantryUITests/   → PantryUITests.xctest
+```
+
+`Shared/` holds the one type the app and the widget both need: `WidgetSnapshot` and the
+`WidgetSnapshotStore` that reads and writes it in the App Group container. The app writes
+after any change worth showing; the widget only ever reads. Keeping it in its own folder
+means the sharing is visible in the directory layout rather than hidden in a target
+membership checkbox.
+
+Inside the app target:
 
 ```
 Pantry/
@@ -157,11 +176,12 @@ Pantry/
 │   ├── Notifications/
 │   ├── Recognition/ Barcode and on-device food recognition
 │   ├── Security/   Keychain-backed secret storage
-│   └── Widget/     Shared snapshot store and builder
+│   └── Widget/     Builds the snapshot the widget reads
 ├── Components/     Reusable rows, controls, AI states, tips
 ├── Utilities/      Normalisation, formatting, expiry, conversion, logging
 ├── Intents/        App Intents and App Shortcuts
-└── Resources/      Asset catalog and the bundled recipe library
+├── Resources/      Asset catalog, seed recipes, string catalog, privacy manifest
+└── Pantry.entitlements
 ```
 
 Two rules hold throughout:

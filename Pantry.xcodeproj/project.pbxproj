@@ -6,11 +6,64 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E100000000000000000000BA /* PantryWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E100000000000000000000B4 /* PantryWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E1000000000000000000001B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E100000000000000000000A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E100000000000000000000A4;
+			remoteInfo = Pantry;
+		};
+		E1000000000000000000001D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E100000000000000000000A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E100000000000000000000A4;
+			remoteInfo = Pantry;
+		};
+		E1000000000000000000001F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E100000000000000000000A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E100000000000000000000A7;
+			remoteInfo = PantryWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E100000000000000000000DD /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E100000000000000000000BA /* PantryWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		E100000000000000000000B1 /* Pantry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pantry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E100000000000000000000B2 /* PantryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PantryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E100000000000000000000B3 /* PantryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PantryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E100000000000000000000B4 /* PantryWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PantryWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E1000000000000000000002A /* Exceptions for "PantryWidgets" folder in "PantryWidgets" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E100000000000000000000A7 /* PantryWidgets */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E100000000000000000000C1 /* Pantry */ = {
@@ -26,6 +79,19 @@
 		E100000000000000000000C3 /* PantryUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PantryUITests;
+			sourceTree = "<group>";
+		};
+		E100000000000000000000C4 /* PantryWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E1000000000000000000002A /* Exceptions for "PantryWidgets" folder in "PantryWidgets" target */,
+			);
+			path = PantryWidgets;
+			sourceTree = "<group>";
+		};
+		E100000000000000000000C5 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +118,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E100000000000000000000DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -59,6 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				E100000000000000000000C1 /* Pantry */,
+				E100000000000000000000C4 /* PantryWidgets */,
+				E100000000000000000000C5 /* Shared */,
 				E100000000000000000000C2 /* PantryTests */,
 				E100000000000000000000C3 /* PantryUITests */,
 				E100000000000000000000A3 /* Products */,
@@ -71,6 +146,7 @@
 				E100000000000000000000B1 /* Pantry.app */,
 				E100000000000000000000B2 /* PantryTests.xctest */,
 				E100000000000000000000B3 /* PantryUITests.xctest */,
+				E100000000000000000000B4 /* PantryWidgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -85,13 +161,16 @@
 				E100000000000000000000D1 /* Sources */,
 				E100000000000000000000D2 /* Frameworks */,
 				E100000000000000000000D3 /* Resources */,
+				E100000000000000000000DD /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E1000000000000000000001E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				E100000000000000000000C1 /* Pantry */,
+				E100000000000000000000C5 /* Shared */,
 			);
 			name = Pantry;
 			packageProductDependencies = (
@@ -146,6 +225,29 @@
 			productReference = E100000000000000000000B3 /* PantryUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		E100000000000000000000A7 /* PantryWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E100000000000000000000E5 /* Build configuration list for PBXNativeTarget "PantryWidgets" */;
+			buildPhases = (
+				E100000000000000000000DA /* Sources */,
+				E100000000000000000000DB /* Frameworks */,
+				E100000000000000000000DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E100000000000000000000C4 /* PantryWidgets */,
+				E100000000000000000000C5 /* Shared */,
+			);
+			name = PantryWidgets;
+			packageProductDependencies = (
+			);
+			productName = PantryWidgets;
+			productReference = E100000000000000000000B4 /* PantryWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -167,6 +269,9 @@
 						CreatedOnToolsVersion = 26.0;
 						TestTargetID = E100000000000000000000A4;
 					};
+					E100000000000000000000A7 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 				};
 			};
 			buildConfigurationList = E100000000000000000000E1 /* Build configuration list for PBXProject "Pantry" */;
@@ -186,6 +291,7 @@
 				E100000000000000000000A4 /* Pantry */,
 				E100000000000000000000A5 /* PantryTests */,
 				E100000000000000000000A6 /* PantryUITests */,
+				E100000000000000000000A7 /* PantryWidgets */,
 			);
 		};
 /* End PBXProject section */
@@ -206,6 +312,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E100000000000000000000D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E100000000000000000000DC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -236,6 +349,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E100000000000000000000DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -249,24 +369,12 @@
 			target = E100000000000000000000A4 /* Pantry */;
 			targetProxy = E1000000000000000000001D /* PBXContainerItemProxy */;
 		};
+		E1000000000000000000001E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E100000000000000000000A7 /* PantryWidgets */;
+			targetProxy = E1000000000000000000001F /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXContainerItemProxy section */
-		E1000000000000000000001B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E100000000000000000000A1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E100000000000000000000A4;
-			remoteInfo = Pantry;
-		};
-		E1000000000000000000001D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E100000000000000000000A1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E100000000000000000000A4;
-			remoteInfo = Pantry;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin XCBuildConfiguration section */
 		E100000000000000000000F1 /* Debug */ = {
@@ -393,8 +501,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pantry/Pantry.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GJ249953UM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Pantry;
@@ -411,7 +521,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pantryapp.Pantry;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.Pantry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -424,8 +534,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pantry/Pantry.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GJ249953UM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Pantry;
@@ -442,7 +554,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pantryapp.Pantry;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.Pantry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -458,7 +570,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pantryapp.PantryTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.PantryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -475,7 +587,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pantryapp.PantryTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.PantryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -491,7 +603,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pantryapp.PantryUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.PantryUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -507,12 +619,64 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pantryapp.PantryUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.PantryUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Pantry;
+			};
+			name = Release;
+		};
+		E100000000000000000000F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PantryWidgets/PantryWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GJ249953UM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PantryWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Pantry;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.Pantry.PantryWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E100000000000000000000FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PantryWidgets/PantryWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GJ249953UM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PantryWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Pantry;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndinisio.Pantry.PantryWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -551,6 +715,15 @@
 			buildConfigurations = (
 				E100000000000000000000F7 /* Debug */,
 				E100000000000000000000F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E100000000000000000000E5 /* Build configuration list for PBXNativeTarget "PantryWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E100000000000000000000F9 /* Debug */,
+				E100000000000000000000FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
