@@ -28,6 +28,7 @@ Add what I have → Pantry understands my inventory → recipes, ideas and warni
 - [Testing](#testing)
 - [Design notes](#design-notes)
 - [Implementation notes](#implementation-notes)
+- [Troubleshooting the first build](#troubleshooting-the-first-build)
 
 ---
 
@@ -380,6 +381,79 @@ is not worth the memory budget.
 **Foundation Models is isolated.** The entire framework surface lives in one file behind
 `#if canImport(FoundationModels)`. A build against an SDK without it still compiles —
 the provider simply reports itself unavailable and `AIService` moves on.
+
+---
+
+## Troubleshooting the first build
+
+### "Multiple commands produce … PantryApp.stringsdata"
+
+The full error looks like:
+
+```
+Multiple commands produce '…/Objects-normal/arm64/PantryApp.stringsdata'
+duplicate output file '…/PantryApp.stringsdata' on task:
+SwiftDriver Compilation Pantry normal arm64
+```
+
+**Cause.** `Pantry/` is a *file-system-synchronized group* (see the pbxproj section
+`PBXFileSystemSynchronizedRootGroup`). That is what lets you add a Swift file without
+editing the project file — but it also means **Xcode compiles every file in that folder,
+including files that are not in this repository**. Two Swift files with the same
+basename in one target produce the same `.stringsdata` output path, and the build fails.
+
+Almost always this is a leftover from an Xcode "App" template: `File → New → Project`
+generates `Pantry/PantryApp.swift`, `Pantry/ContentView.swift`, `Pantry/Item.swift`,
+`Pantry/Assets.xcassets` and `Pantry/Preview Content/`. If those were created before the
+repository was brought into the same folder, they are still sitting there, invisible to
+git but very visible to Xcode.
+
+**Find it.** All three commands are read-only:
+
+```bash
+cd ~/Documents/Projects/Pantry
+
+# Anything in the working tree that is not in the repository
+git status --short
+
+# Any duplicate Swift basename inside the compiled folder
+find Pantry -name '*.swift' -exec basename {} \; | sort | uniq -d
+
+# Where the copies actually are
+find Pantry -name 'PantryApp.swift'
+```
+
+A clean checkout returns nothing from the second command, and exactly
+`Pantry/App/PantryApp.swift` from the third.
+
+**Fix.** Delete the template leftovers — not the versioned files. In this repository the
+app lives in subfolders (`Pantry/App/`, `Pantry/Models/`, `Pantry/Views/`, …) and
+**nothing sits directly in `Pantry/`**, so anything loose at the top level of that folder
+is a leftover. The usual set:
+
+```
+Pantry/PantryApp.swift          ← delete (the real one is Pantry/App/PantryApp.swift)
+Pantry/ContentView.swift        ← delete
+Pantry/Item.swift               ← delete
+Pantry/Assets.xcassets          ← delete (the real one is Pantry/Resources/Assets.xcassets)
+Pantry/Preview Content/         ← delete
+```
+
+Check each against `git status` before removing it, then clean the build folder
+(`Product → Clean Build Folder`, ⇧⌘K) and build again.
+
+Two further errors are waiting behind this one if the leftovers stay: a template
+`PantryApp.swift` also declares `@main struct PantryApp: App`, so you get
+"'main' attribute cannot be used in a module that contains top-level code" or a duplicate
+`@main`; and a second `Assets.xcassets` produces the same duplicate-output error for
+`Assets.car`.
+
+### "Update to recommended settings"
+
+Click it. Xcode knows the correct values for the exact version you are running, and the
+changes it makes are ordinary build settings — this is one to let Xcode do rather than
+to hand-edit the project file. Review the diff it shows before accepting, as you would
+any change.
 
 ---
 

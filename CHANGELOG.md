@@ -4,6 +4,23 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.1 — Document the synchronized-group build failure
+
+**Added**
+
+- A troubleshooting section in the README for "Multiple commands produce
+  PantryApp.stringsdata", which is the most likely first-build failure for this project
+  and is caused by the project structure rather than by any file in the repository.
+  `Pantry/` is a file-system-synchronized group, so Xcode compiles everything in that
+  folder — including files that are not in git, such as leftovers from an Xcode "App"
+  template created in the same directory before the repository arrived. Includes the
+  read-only commands to find the duplicates, which files are safe to delete, and the two
+  further errors (duplicate `@main`, duplicate `Assets.car`) waiting behind it.
+- A note that "Update to recommended settings" should be done with Xcode's own button
+  rather than by hand-editing the project file.
+
+---
+
 ## v1.0 — Consistency pass and housekeeping
 
 **Fixed**
