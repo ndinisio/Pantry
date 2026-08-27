@@ -105,9 +105,21 @@ placeholder bundle identifier is `com.pantryapp.Pantry`; change it to your own.
 
 ### 2. App icon
 
-`Pantry/Resources/Assets.xcassets/AppIcon.appiconset` is an empty single-size slot. Drop
-a 1024×1024 image in via Xcode's asset catalog editor. No icon has been generated or
-fetched from anywhere.
+The icon is an **Icon Composer** document at `Pantry/Resources/AppIcon.icon`, which is
+the Xcode 26+ format — one document that produces the light, dark and tinted variants and
+the layered treatment iOS applies, rather than a flat 1024×1024 image.
+
+Because `Pantry/` is a file-system-synchronized group, dropping the `.icon` file in that
+folder is all that is needed to include it in the target. The build setting
+`ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon` already points at it by name.
+
+There is deliberately **no `AppIcon.appiconset`** in the asset catalog. An appiconset and
+an `.icon` file sharing the name `AppIcon` both claim the same build setting, and an
+empty one warns on every build. If you ever switch back to a flat image, remove the
+`.icon` file first.
+
+Edit the icon by opening `AppIcon.icon` — Xcode launches Icon Composer. No icon artwork
+has been generated or fetched from anywhere; the file is yours.
 
 ### 3. The widget extension
 

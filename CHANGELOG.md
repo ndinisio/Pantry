@@ -4,6 +4,18 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.8 — Make room for the Icon Composer app icon
+
+**Removed**
+
+- The empty `AppIcon.appiconset` placeholder. An appiconset and an Icon Composer `.icon`
+  document sharing the name `AppIcon` both claim
+  `ASSETCATALOG_COMPILER_APPICON_NAME`, and the empty set was warning on every build
+  regardless. With it gone, `Pantry/Resources/AppIcon.icon` is unambiguous and is picked
+  up automatically by the file-system-synchronized group with no project-file change.
+
+---
+
 ## v1.7 — Choose which nutrients to show
 
 **Added**
