@@ -80,7 +80,8 @@ enum AIPrompts {
                   "steps": ["string"],
                   "ownedIngredients": ["names taken from the inventory"],
                   "missingIngredients": ["names not in the inventory"],
-                  "nutritionPerServing": { "calories": 0, "proteinGrams": 0, "carbohydrateGrams": 0, "fatGrams": 0, "fibreGrams": 0 }
+                  "nutritionPerServing": { "calories": 0, "proteinGrams": 0, "carbohydrateGrams": 0, "sugarGrams": 0,
+                                           "fatGrams": 0, "saturatedFatGrams": 0, "fibreGrams": 0, "saltGrams": 0 }
                 }
               ]
             }

@@ -20,6 +20,11 @@ final class UserPreferences {
     var equipment: [String] = CookingEquipment.defaultSelection.map(\.rawValue)
     var budgetPreferenceRaw: String = BudgetPreference.balanced.rawValue
 
+    // Nutrition
+    /// Which nutrients appear in nutrition panels. Empty means the panel is hidden
+    /// entirely, which is a legitimate choice — nutrition is not this app's purpose.
+    var trackedNutrients: [String] = Nutrient.defaultSelection.map(\.rawValue)
+
     // Expiry + notifications
     var useSoonWindowDays: Int = 3
     var expiryNotificationsEnabled: Bool = false
@@ -55,6 +60,11 @@ final class UserPreferences {
     var selectedEquipment: [CookingEquipment] {
         get { equipment.compactMap(CookingEquipment.init(rawValue:)) }
         set { equipment = newValue.map(\.rawValue) }
+    }
+
+    var selectedNutrients: [Nutrient] {
+        get { Nutrient.from(rawValues: trackedNutrients) }
+        set { trackedNutrients = newValue.map(\.rawValue) }
     }
 
     /// Everything the user has asked to avoid, normalised for matching.

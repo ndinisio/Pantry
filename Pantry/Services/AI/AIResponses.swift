@@ -44,8 +44,11 @@ enum AIResponses {
             var calories: Double?
             var proteinGrams: Double?
             var carbohydrateGrams: Double?
+            var sugarGrams: Double?
             var fatGrams: Double?
+            var saturatedFatGrams: Double?
             var fibreGrams: Double?
+            var saltGrams: Double?
         }
 
         /// Rejects payloads that decode but are not usable — an empty title, no steps,
@@ -66,8 +69,11 @@ enum AIResponses {
                     calories: $0.calories,
                     proteinGrams: $0.proteinGrams,
                     carbohydrateGrams: $0.carbohydrateGrams,
+                    sugarGrams: $0.sugarGrams,
                     fatGrams: $0.fatGrams,
+                    saturatedFatGrams: $0.saturatedFatGrams,
                     fibreGrams: $0.fibreGrams,
+                    saltGrams: $0.saltGrams,
                     source: .estimate
                 )
             }

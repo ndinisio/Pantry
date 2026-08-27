@@ -34,6 +34,11 @@ struct MoreView: View {
                         Label(String(localized: "Cooking Preferences"), systemImage: "fork.knife")
                     }
                     NavigationLink {
+                        NutritionSettingsView()
+                    } label: {
+                        Label(String(localized: "Nutrition"), systemImage: "chart.pie")
+                    }
+                    NavigationLink {
                         NotificationSettingsView()
                     } label: {
                         Label(String(localized: "Reminders"), systemImage: "bell")

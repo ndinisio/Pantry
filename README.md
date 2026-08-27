@@ -56,7 +56,13 @@ and every row carries its reason ("unlocks 4 more recipes from your pantry"). Ti
 something off offers to move it into the pantry.
 
 **More** holds the optional weekly meal plan, pantry insights, cooking preferences,
-reminders, intelligence settings and data management.
+nutrition, reminders, intelligence settings and data management.
+
+**Nutrition** is present but never the point. Recipes carry per-serving figures and
+pantry items can carry their own, and you choose which of the eight nutrients — calories,
+protein, carbohydrate, sugars, fat, saturates, fibre, salt — actually appear. Turning them
+all off hides nutrition panels entirely. A nutrient with no figure is omitted rather than
+shown as zero, and anything a model produced is labelled an estimate wherever it appears.
 
 Beyond the app itself: four App Intents with Siri phrases, a widget in three sizes, and
 two opt-in daily reminders.

@@ -161,41 +161,6 @@ struct PantryItemDetailView: View {
     }
 }
 
-/// Nutrition rows, with estimates clearly marked as estimates.
-struct NutritionSection: View {
-    var nutrition: NutritionFacts
-    var title: String
-    var subtitle: String?
-
-    var body: some View {
-        Section {
-            if let calories = nutrition.calories {
-                LabeledContent(String(localized: "Calories"), value: QuantityFormatter.number(calories))
-            }
-            if let protein = nutrition.proteinGrams {
-                LabeledContent(String(localized: "Protein"), value: "\(QuantityFormatter.number(protein)) g")
-            }
-            if let carbs = nutrition.carbohydrateGrams {
-                LabeledContent(String(localized: "Carbohydrate"), value: "\(QuantityFormatter.number(carbs)) g")
-            }
-            if let fat = nutrition.fatGrams {
-                LabeledContent(String(localized: "Fat"), value: "\(QuantityFormatter.number(fat)) g")
-            }
-            if let fibre = nutrition.fibreGrams {
-                LabeledContent(String(localized: "Fibre"), value: "\(QuantityFormatter.number(fibre)) g")
-            }
-        } header: {
-            Text(title)
-        } footer: {
-            if nutrition.isEstimated {
-                Text("Estimated, not measured. Treat these as a rough guide rather than nutritional advice.")
-            } else if let subtitle {
-                Text(subtitle)
-            }
-        }
-    }
-}
-
 #Preview {
     NavigationStack {
         PantryItemDetailView(

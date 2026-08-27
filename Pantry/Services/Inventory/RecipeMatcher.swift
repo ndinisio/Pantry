@@ -319,6 +319,7 @@ struct PreferenceSnapshot: Equatable, Sendable {
     var equipment: [CookingEquipment] = CookingEquipment.defaultSelection
     var budgetPreference: BudgetPreference = .balanced
     var useSoonWindowDays: Int = 3
+    var trackedNutrients: [Nutrient] = Nutrient.defaultSelection
 
     static let `default` = PreferenceSnapshot()
 
@@ -339,5 +340,6 @@ struct PreferenceSnapshot: Equatable, Sendable {
         equipment = preferences.selectedEquipment
         budgetPreference = preferences.budgetPreference
         useSoonWindowDays = preferences.useSoonWindowDays
+        trackedNutrients = preferences.selectedNutrients
     }
 }

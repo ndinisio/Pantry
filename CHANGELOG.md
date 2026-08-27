@@ -4,6 +4,36 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.7 — Choose which nutrients to show
+
+**Added**
+
+- A `Nutrient` type covering the eight figures on a UK/EU label plus fibre, and three
+  new fields on `NutritionFacts` — sugars, saturates and salt. Every field is optional
+  and older stored nutrition decodes unchanged.
+- **More → Nutrition**, where you choose which nutrients appear in recipe and pantry
+  panels. Turning all of them off hides nutrition entirely, which is a legitimate choice
+  in an app that is not about nutrition. There is a one-tap return to the standard set.
+- Generated recipes are now asked for all eight figures, and the seed loader accepts
+  them, so anything the AI layer produces can fill the wider set.
+
+**Changed**
+
+- `NutritionSection` moved out of `PantryItemDetailView` into its own component and
+  became preference-aware. It omits a nutrient with no figure rather than rendering it
+  as zero — "no data" and "none of it" are different claims — and says so in the footer
+  when a chosen nutrient is missing, rather than leaving the reader to wonder whether
+  the app is broken.
+
+**Note**
+
+- The 18 bundled recipes carry the standard five figures only. Switching on sugars,
+  saturates or salt will show nothing for them, which the footer explains; inventing
+  fifty-four figures to fill the gap would have made the panel look complete while being
+  no more truthful.
+
+---
+
 ## v1.4 — Document the subproject-reference trap
 
 **Changed**
