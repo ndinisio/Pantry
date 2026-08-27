@@ -28,7 +28,7 @@ enum AppTab: String, CaseIterable, Identifiable, Hashable {
         case .pantry: return "cabinet"
         case .recipes: return "book"
         case .shopping: return "cart"
-        case .more: return "ellipsis"
+        case .more: return "ellipsis.circle"
         }
     }
 }

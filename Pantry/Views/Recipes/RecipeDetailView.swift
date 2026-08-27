@@ -20,6 +20,7 @@ struct RecipeDetailView: View {
     @State private var isCooking = false
     @State private var isConfirmingCooked = false
     @State private var substitutionTarget: RecipeIngredient?
+    /// Set once missing items have been added, so the section can confirm inline.
     @State private var addedToShoppingCount: Int?
 
     init(recipe: Recipe) {
@@ -89,23 +90,11 @@ struct RecipeDetailView: View {
         } message: {
             Text("Pantry can take the ingredients you used out of your inventory.")
         }
-        .alert(
-            Text("Added to Shopping"),
-            isPresented: Binding(
-                get: { addedToShoppingCount != nil },
-                set: { if !$0 { addedToShoppingCount = nil } }
-            )
-        ) {
-            Button(String(localized: "OK")) { addedToShoppingCount = nil }
-        } message: {
-            if let count = addedToShoppingCount {
-                Text(count == 1 ? "1 item added to your shopping list." : "\(count) items added to your shopping list.")
-            }
-        }
     }
 
     // MARK: - Sections
 
+    @ViewBuilder
     private var summarySection: some View {
         Section {
             if !recipe.summary.isEmpty {
@@ -134,7 +123,13 @@ struct RecipeDetailView: View {
                 }
             }
             .accessibilityValue(Text("\(servings) servings"))
+        } footer: {
+            if recipe.origin == .generated {
+                Text("Generated for your pantry. Check quantities and cooking times before you rely on them.")
+            }
+        }
 
+        Section {
             Button {
                 isCooking = true
             } label: {
@@ -144,10 +139,6 @@ struct RecipeDetailView: View {
             .buttonStyle(.borderedProminent)
             .disabled(recipe.steps.isEmpty)
             .listRowBackground(Color.clear)
-        } footer: {
-            if recipe.origin == .generated {
-                Text("Generated for your pantry. Check quantities and cooking times before you rely on them.")
-            }
         }
     }
 
@@ -162,7 +153,18 @@ struct RecipeDetailView: View {
                 )
             }
 
-            if !missingIngredients.isEmpty {
+            if let addedToShoppingCount {
+                // Confirmed in place rather than with an alert: an alert for "done"
+                // teaches people to dismiss alerts without reading them.
+                Label(
+                    addedToShoppingCount == 1
+                        ? String(localized: "1 item added to your shopping list")
+                        : String(localized: "\(addedToShoppingCount) items added to your shopping list"),
+                    systemImage: "checkmark.circle.fill"
+                )
+                .foregroundStyle(Color.accentColor)
+                .transition(.opacity)
+            } else if !missingIngredients.isEmpty {
                 Button {
                     addMissingToShopping()
                 } label: {
@@ -274,7 +276,7 @@ struct RecipeDetailView: View {
             added += 1
         }
         try? modelContext.save()
-        addedToShoppingCount = added
+        withAnimation { addedToShoppingCount = added }
     }
 }
 

@@ -19,7 +19,7 @@ struct FreshnessBadge: View {
         switch state {
         case .past: return .orange
         case .today: return .orange
-        case .useSoon: return .yellow
+        case .useSoon: return .secondary
         case .fresh: return .secondary
         case .unknown: return .secondary
         }

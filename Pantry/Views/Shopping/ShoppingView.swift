@@ -18,7 +18,7 @@ struct ShoppingView: View {
 
     @State private var searchText = ""
     @State private var isPresentingAdd = false
-    @State private var purchasedPendingMove: ShoppingItem?
+    @State private var isConfirmingMoveToPantry = false
     @State private var adviceState: AIState<AIResponses.ShoppingAdvice> = .idle
     @State private var adviceTask: Task<Void, Never>?
 
@@ -70,15 +70,16 @@ struct ShoppingView: View {
                 AddShoppingItemView()
             }
             .confirmationDialog(
-                Text("Add \(purchasedPendingMove?.name ?? "") to your pantry?"),
-                isPresented: Binding(
-                    get: { purchasedPendingMove != nil },
-                    set: { if !$0 { purchasedPendingMove = nil } }
-                ),
+                Text(purchased.count == 1
+                     ? "Add 1 purchased item to your pantry?"
+                     : "Add \(purchased.count) purchased items to your pantry?"),
+                isPresented: $isConfirmingMoveToPantry,
                 titleVisibility: .visible
             ) {
-                Button(String(localized: "Add to Pantry")) { moveToPantry() }
-                Button(String(localized: "Just Tick It Off"), role: .cancel) { purchasedPendingMove = nil }
+                Button(String(localized: "Add to Pantry")) { moveAllToPantry() }
+                Button(String(localized: "Cancel"), role: .cancel) {}
+            } message: {
+                Text("They'll be taken off this list.")
             }
             .onChange(of: appEnvironment.pendingRoute) { _, _ in
                 _ = appEnvironment.takePendingRoute { route in
@@ -151,6 +152,16 @@ struct ShoppingView: View {
                 Section {
                     ForEach(purchased) { item in
                         ShoppingItemRow(item: item) { toggle(item) }
+                    }
+                    Button {
+                        isConfirmingMoveToPantry = true
+                    } label: {
+                        Label(
+                            purchased.count == 1
+                                ? String(localized: "Add 1 Item to Pantry")
+                                : String(localized: "Add \(purchased.count) Items to Pantry"),
+                            systemImage: "cabinet"
+                        )
                     }
                     Button(role: .destructive) {
                         for item in purchased { modelContext.delete(item) }
@@ -271,17 +282,18 @@ struct ShoppingView: View {
             item.purchasedDate = item.isPurchased ? .now : nil
             try? modelContext.save()
         }
-        if item.isPurchased {
-            purchasedPendingMove = item
-        }
     }
 
-    private func moveToPantry() {
-        guard let item = purchasedPendingMove else { return }
-        InventoryService(context: modelContext).add([item.makePantryItem()])
-        modelContext.delete(item)
-        try? modelContext.save()
-        purchasedPendingMove = nil
+    /// Moves everything ticked off into the pantry in one go, merging with what is
+    /// already there rather than creating duplicate rows.
+    private func moveAllToPantry() {
+        let items = purchased
+        guard !items.isEmpty else { return }
+        withAnimation {
+            InventoryService(context: modelContext).add(items.map { $0.makePantryItem() })
+            for item in items { modelContext.delete(item) }
+            try? modelContext.save()
+        }
     }
 
     private func add(_ suggestion: ShoppingSuggestion) {

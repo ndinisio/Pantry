@@ -82,6 +82,7 @@ struct AddItemView: View {
                     Picker(String(localized: "Unit"), selection: $unit) {
                         unitOptions
                     }
+                    .pickerStyle(.navigationLink)
                 } footer: {
                     if !isEditing {
                         Text("Name and quantity are all you need. Everything else is optional.")

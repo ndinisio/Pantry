@@ -106,7 +106,6 @@ struct RecipesView: View {
         List {
             collectionSection(.forYou, matches: allMatches)
             collectionSection(.usesExpiring, matches: usesExpiring)
-            collectionSection(.readyNow, matches: readyNow)
             collectionSection(.quick, matches: quick)
             collectionSection(.almostThere, matches: almostThere)
 
