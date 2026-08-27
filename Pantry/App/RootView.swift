@@ -10,7 +10,10 @@ struct RootView: View {
 
     @Environment(AppEnvironment.self) private var appEnvironment
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @Query private var preferences: [UserPreferences]
+    @Query private var items: [PantryItem]
+    @Query(filter: #Predicate<ShoppingItem> { !$0.isPurchased }) private var shoppingItems: [ShoppingItem]
 
     var body: some View {
         @Bindable var appEnvironment = appEnvironment
@@ -38,10 +41,18 @@ struct RootView: View {
             // has content with no network and no account.
             RecipeLibrary.installIfNeeded(context: modelContext)
             refreshPreferenceSnapshot()
+            refreshWidgetSnapshot()
             await appEnvironment.notifications.refreshAuthorizationStatus()
         }
         .onChange(of: preferences.first?.lastUpdated) { _, _ in
             refreshPreferenceSnapshot()
+            refreshWidgetSnapshot()
+        }
+        .onChange(of: items.count) { _, _ in refreshWidgetSnapshot() }
+        .onChange(of: shoppingItems.count) { _, _ in refreshWidgetSnapshot() }
+        .onChange(of: scenePhase) { _, phase in
+            // Catches edits that don't change a count — a quantity, a date, a cook.
+            if phase == .background { refreshWidgetSnapshot() }
         }
         .onOpenURL { url in
             if let route = DeepLink.route(for: url) {
@@ -53,6 +64,10 @@ struct RootView: View {
     private func refreshPreferenceSnapshot() {
         let record = PantryModelContainer.preferences(in: modelContext)
         appEnvironment.preferences = PreferenceSnapshot(record)
+    }
+
+    private func refreshWidgetSnapshot() {
+        WidgetSnapshotBuilder.refresh(context: modelContext, preferences: appEnvironment.preferences)
     }
 }
 
