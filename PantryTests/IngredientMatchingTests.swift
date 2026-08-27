@@ -32,8 +32,9 @@ struct IngredientMatchingTests {
 
     @Test("A name made only of descriptors still produces a key")
     func neverProducesAnEmptyKey() {
-        #expect(!IngredientNormaliser.key(for: "fresh chopped").isEmpty)
-        #expect(!IngredientNormaliser.key(for: "!!!").isEmpty || IngredientNormaliser.key(for: "!!!").isEmpty)
+        // Every token is noise, so the fallback keeps the cleaned text rather than
+        // collapsing two different items onto the same empty key.
+        #expect(IngredientNormaliser.key(for: "fresh chopped") == "fresh chopped")
     }
 
     @Test("A general ingredient matches a specific one, in both directions")
@@ -46,6 +47,16 @@ struct IngredientMatchingTests {
     func doesNotMatchUnrelatedFoods() {
         #expect(!IngredientNormaliser.matches("chicken", "chickpea"))
         #expect(!IngredientNormaliser.matches("milk", "flour"))
+    }
+
+    @Test("Matching is on whole words, so a food is never confused with a longer one")
+    func matchesOnWordBoundariesOnly() {
+        #expect(!IngredientNormaliser.matches("egg", "eggplant"))
+        #expect(!IngredientNormaliser.matches("corn", "cornflour"))
+        #expect(!IngredientNormaliser.matches("lime", "limeade"))
+        // The legitimate case still works.
+        #expect(IngredientNormaliser.matches("rice", "basmati rice"))
+        #expect(IngredientNormaliser.matches("soy sauce", "dark soy sauce"))
     }
 }
 
@@ -84,7 +95,14 @@ struct CategoryGuesserTests {
     @Test("Liquids default to a volume unit")
     func guessesUnits() {
         #expect(CategoryGuesser.unit(for: "Milk") == .millilitre)
+        #expect(CategoryGuesser.unit(for: "Olive oil") == .millilitre)
         #expect(CategoryGuesser.unit(for: "Chicken breast") == .gram)
         #expect(CategoryGuesser.unit(for: "Apples") == .piece)
+    }
+
+    @Test("A word that merely contains a liquid's name is not treated as a liquid")
+    func doesNotMistakeSubstringsForLiquids() {
+        // "boiled" contains "oil".
+        #expect(CategoryGuesser.unit(for: "Boiled eggs") != .millilitre)
     }
 }

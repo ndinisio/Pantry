@@ -276,14 +276,17 @@ struct InventoryIndex {
     func contains(_ name: String) -> Bool {
         let key = IngredientNormaliser.key(for: name)
         if keys.contains(key) { return true }
-        // Allow "chicken" in a recipe to be satisfied by "chicken breast" and vice versa.
-        return keys.contains { $0.contains(key) || key.contains($0) }
+        // "chicken" in a recipe is satisfied by "chicken breast" and vice versa —
+        // but only on whole words, so "egg" never matches "eggplant".
+        return keys.contains { IngredientNormaliser.contains($0, key) || IngredientNormaliser.contains(key, $0) }
     }
 
     func item(for name: String) -> PantryItem? {
         let key = IngredientNormaliser.key(for: name)
         if let exact = itemsByKey[key] { return exact }
-        return itemsByKey.first { $0.key.contains(key) || key.contains($0.key) }?.value
+        return itemsByKey.first {
+            IngredientNormaliser.contains($0.key, key) || IngredientNormaliser.contains(key, $0.key)
+        }?.value
     }
 
     func expiringItems(matching names: [String]) -> [PantryItem] {
@@ -291,7 +294,8 @@ struct InventoryIndex {
         var result: [PantryItem] = []
         for name in names {
             let key = IngredientNormaliser.key(for: name)
-            for expiringKey in expiringKeys where expiringKey.contains(key) || key.contains(expiringKey) {
+            for expiringKey in expiringKeys
+            where IngredientNormaliser.contains(expiringKey, key) || IngredientNormaliser.contains(key, expiringKey) {
                 if let item = itemsByKey[expiringKey], !seen.contains(item.id) {
                     seen.insert(item.id)
                     result.append(item)

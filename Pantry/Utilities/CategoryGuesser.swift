@@ -55,11 +55,15 @@ enum CategoryGuesser {
         return best?.category ?? .other
     }
 
+    /// Foods measured by volume regardless of their category.
+    private static let pouredFoods: Set<String> = ["milk", "juice", "water", "oil", "vinegar", "stock", "cream"]
+
     /// A sensible default unit for a food, so quantity entry starts in the right place.
     static func unit(for name: String) -> MeasurementUnit {
         let category = category(for: name)
-        let key = name.lowercased()
-        if key.contains("milk") || key.contains("juice") || key.contains("water") || key.contains("oil") {
+        // Whole words only: "boiled" contains "oil", and boiled eggs are not a liquid.
+        let words = Set(IngredientNormaliser.key(for: name).split(separator: " ").map(String.init))
+        if !words.isDisjoint(with: pouredFoods) {
             return .millilitre
         }
         switch category {

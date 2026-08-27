@@ -104,6 +104,12 @@ enum NaturalLanguageItemParser {
             }
         }
 
+        // "a dozen", "two dozen" — a second number word multiplies the first.
+        if let current = quantity, let next = tokens.first, let multiplier = numberWords[next], multiplier > 1 {
+            quantity = current * multiplier
+            tokens.removeFirst()
+        }
+
         if unit == nil, let first = tokens.first, let matched = unitWords[first] {
             unit = matched
             tokens.removeFirst()
@@ -114,7 +120,9 @@ enum NaturalLanguageItemParser {
             tokens.removeFirst()
         }
 
-        let name = tokens.joined(separator: " ").trimmingCharacters(in: .whitespaces)
+        let name = tokens
+            .joined(separator: " ")
+            .trimmingCharacters(in: CharacterSet(charactersIn: " ."))
         guard !name.isEmpty else { return nil }
 
         let displayName = name

@@ -31,10 +31,17 @@ struct NaturalLanguageParsingTests {
         #expect(item.name == "Chicken")
     }
 
-    @Test("Number words are understood")
+    @Test("Number words are understood, including a second one that multiplies")
     func parsesNumberWords() throws {
-        let item = try #require(NaturalLanguageItemParser.parseFragment("a dozen eggs"))
-        #expect(item.quantity == 12)
+        #expect(try #require(NaturalLanguageItemParser.parseFragment("six eggs")).quantity == 6)
+        #expect(try #require(NaturalLanguageItemParser.parseFragment("a dozen eggs")).quantity == 12)
+        #expect(try #require(NaturalLanguageItemParser.parseFragment("two dozen eggs")).quantity == 24)
+    }
+
+    @Test("Sentence punctuation is not part of the name")
+    func stripsTrailingPunctuation() throws {
+        let item = try #require(NaturalLanguageItemParser.parseFragment("six eggs."))
+        #expect(item.name == "Eggs")
     }
 
     @Test("A bare name defaults to one, with a guessed unit and category")

@@ -12,7 +12,8 @@ enum IngredientNormaliser {
     private static let noiseWords: Set<String> = [
         "fresh", "frozen", "dried", "raw", "cooked", "organic", "large", "small",
         "medium", "whole", "chopped", "sliced", "diced", "minced", "ground",
-        "free", "range", "unsalted", "salted", "extra", "virgin", "plain", "of", "a", "an", "the"
+        "free", "range", "unsalted", "salted", "extra", "virgin", "plain",
+        "finely", "roughly", "thinly", "coarsely", "freshly", "of", "a", "an", "the"
     ]
 
     /// Plurals that a naive "-s" rule gets wrong.
@@ -61,13 +62,28 @@ enum IngredientNormaliser {
         return word
     }
 
-    /// True when two names refer to the same thing, allowing one to contain the other
-    /// ("chicken" matches "chicken breast", which is what a cook expects).
+    /// True when two names refer to the same thing.
+    ///
+    /// One name may contain the other — "chicken" matches "chicken breast", which is
+    /// what a cook expects — but only on **whole words**. Plain substring matching
+    /// would make "egg" match "eggplant" and "corn" match "cornflour", and a wrong
+    /// merge is worse than a miss.
     static func matches(_ lhs: String, _ rhs: String) -> Bool {
         let a = key(for: lhs)
         let b = key(for: rhs)
         guard !a.isEmpty, !b.isEmpty else { return false }
         if a == b { return true }
-        return a.contains(b) || b.contains(a)
+        return contains(a, b) || contains(b, a)
+    }
+
+    /// True when every word of `needle` appears in `haystack` as a contiguous run.
+    static func contains(_ haystack: String, _ needle: String) -> Bool {
+        let words = haystack.split(separator: " ")
+        let target = needle.split(separator: " ")
+        guard !target.isEmpty, target.count <= words.count else { return false }
+        for start in 0...(words.count - target.count) {
+            if Array(words[start..<(start + target.count)]) == Array(target) { return true }
+        }
+        return false
     }
 }
