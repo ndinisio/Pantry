@@ -4,6 +4,22 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.4 — Document the subproject-reference trap
+
+**Changed**
+
+- Troubleshooting now covers what happens after the nested template project is removed.
+  If Xcode was opened while the nested `.xcodeproj` existed, it may have registered it as
+  a subproject — a `PBXFileReference` with `lastKnownFileType = "wrapper.pb-project"`, an
+  empty `Products` group and a `projectReferences` block. That survives deleting the
+  folder and leaves the project pointing at a file that is gone. Includes the grep to
+  detect it, the instruction to quit Xcode first so it cannot write the change back out,
+  and the restore command. Also warns against mistaking it for the recommended-settings
+  update, which it resembles in the diff but which changes build settings rather than
+  adding project references.
+
+---
+
 ## v1.3 — Cover the nested-Xcode-project case
 
 **Changed**

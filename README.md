@@ -458,6 +458,28 @@ mv Pantry/Pantry.xcodeproj Pantry/Pantry Pantry/PantryTests Pantry/PantryUITests
    ~/Desktop/pantry-template-backup/
 ```
 
+**Then check whether Xcode wired the nested project in before you removed it.** If it
+was ever opened while the nested `.xcodeproj` existed, Xcode may have registered it as a
+*subproject*, which survives deleting the folder and leaves a reference to a file that is
+no longer there:
+
+```bash
+git diff Pantry.xcodeproj/project.pbxproj | grep -E 'projectReferences|wrapper.pb-project'
+```
+
+Any output means the reference was added. Quit Xcode first — it holds the project in
+memory and will write it back out — then restore the project file:
+
+```bash
+git fetch origin
+git checkout origin/main -- Pantry.xcodeproj
+git commit -m 'Remove the subproject reference to the nested template project'
+```
+
+Do not mistake this change for the recommended-settings update: a subproject reference
+adds a `PBXFileReference` with `lastKnownFileType = "wrapper.pb-project"`, an empty
+`Products` group and a `projectReferences` block, and changes no build settings at all.
+
 If the leftovers are loose files rather than a nested project, the usual set is:
 
 ```
