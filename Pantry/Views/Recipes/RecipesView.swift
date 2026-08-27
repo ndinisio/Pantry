@@ -17,6 +17,7 @@ struct RecipesView: View {
 
     @State private var searchText = ""
     @State private var isPresentingWhatCanIMake = false
+    @State private var path = NavigationPath()
 
     private static let sectionLimit = 4
 
@@ -66,7 +67,7 @@ struct RecipesView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
                 if !searchText.isEmpty {
                     searchResultsList
@@ -213,16 +214,20 @@ struct RecipesView: View {
         }
     }
 
+    /// Opens a recipe that something outside the app asked for — a widget tap, an
+    /// intent, or a suggestion the user just materialised.
     private func handlePendingRoute() {
         guard let route = appEnvironment.takePendingRoute(matching: { route in
             if case .recipe = route { return true }
             return false
         }) else { return }
-        // The recipe is opened by the collection view's navigation path; here it is
-        // enough to make sure the tab is showing its library.
-        if case .recipe = route {
-            searchText = ""
-        }
+
+        guard case .recipe(let id) = route,
+              let recipe = recipes.first(where: { $0.id == id }) else { return }
+
+        searchText = ""
+        isPresentingWhatCanIMake = false
+        path.append(recipe)
     }
 }
 

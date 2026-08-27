@@ -177,6 +177,9 @@ struct ShoppingView: View {
         Section {
             switch adviceState {
             case .idle:
+                if !appEnvironment.network.isConnected {
+                    OfflineNoticeView()
+                }
                 Button(action: askForAdvice) {
                     Label(String(localized: "What Should I Buy?"), systemImage: "sparkles")
                 }

@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UIKit
 
 /// One item, and — more usefully — what to cook with it.
 ///
@@ -19,6 +20,7 @@ struct PantryItemDetailView: View {
 
     @State private var isEditing = false
     @State private var isConfirmingDelete = false
+    @State private var isPresentingIdeas = false
 
     private var service: InventoryService { InventoryService(context: modelContext) }
     private var windowDays: Int { appEnvironment.preferences.useSoonWindowDays }
@@ -103,8 +105,8 @@ struct PantryItemDetailView: View {
                         }
                     }
                 }
-                NavigationLink {
-                    WhatCanIMakeView(preselectedItemName: item.name)
+                Button {
+                    isPresentingIdeas = true
                 } label: {
                     Label(String(localized: "Find More Ideas"), systemImage: "sparkles")
                 }
@@ -122,9 +124,6 @@ struct PantryItemDetailView: View {
         }
         .navigationTitle(item.name)
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(for: Recipe.self) { recipe in
-            RecipeDetailView(recipe: recipe)
-        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -142,6 +141,11 @@ struct PantryItemDetailView: View {
         }
         .sheet(isPresented: $isEditing) {
             AddItemView(editing: item)
+        }
+        .sheet(isPresented: $isPresentingIdeas) {
+            NavigationStack {
+                WhatCanIMakeView(preselectedItemName: item.name)
+            }
         }
         .confirmationDialog(
             Text("Remove \(item.name)?"),

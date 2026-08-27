@@ -37,12 +37,6 @@ struct PantryShortcuts: AppShortcutsProvider {
             shortTitle: "Add to Pantry",
             systemImageName: "plus"
         )
-        AddShoppingItemIntent.shortcut
-    }
-}
-
-extension AddShoppingItemIntent {
-    static var shortcut: AppShortcut {
         AppShortcut(
             intent: AddShoppingItemIntent(),
             phrases: [

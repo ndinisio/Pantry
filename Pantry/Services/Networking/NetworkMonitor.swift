@@ -5,7 +5,6 @@ import Observation
 /// Tracks reachability so the app can say "you're offline" instead of letting a request
 /// time out and look broken.
 @Observable
-@MainActor
 final class NetworkMonitor {
 
     private(set) var isConnected: Bool = true

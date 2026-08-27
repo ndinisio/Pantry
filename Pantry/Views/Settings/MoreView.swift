@@ -10,7 +10,6 @@ struct MoreView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(AppEnvironment.self) private var appEnvironment
-    @Query(sort: [SortDescriptor(\PantryItem.name)]) private var items: [PantryItem]
 
     var body: some View {
         NavigationStack {

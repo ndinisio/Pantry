@@ -184,6 +184,9 @@ struct WhatCanIMakeView: View {
         Section {
             switch aiState {
             case .idle:
+                if !appEnvironment.network.isConnected {
+                    OfflineNoticeView()
+                }
                 Button(action: generate) {
                     Label(String(localized: "Ask for New Ideas"), systemImage: "sparkles")
                 }

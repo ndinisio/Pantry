@@ -1,9 +1,13 @@
 import Foundation
 import SwiftData
+import OSLog
 
 /// Every write to the inventory goes through here, so views stay free of business
 /// logic and behaviour like "cooking decrements what you used" lives in one place.
-@MainActor
+///
+/// Deliberately not actor-isolated: it wraps a `ModelContext`, which callers already
+/// own, and annotating it would force every view helper that touches it to be isolated
+/// too. Everything here is called from the main thread in practice.
 struct InventoryService {
     let context: ModelContext
 

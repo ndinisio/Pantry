@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 
 /// A validated answer plus where it came from.
 struct AIResult<Value> {

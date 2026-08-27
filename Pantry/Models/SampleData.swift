@@ -11,7 +11,6 @@ enum SampleData {
     /// Marker used on notes so sample items can be identified and removed cleanly.
     static let marker = "· sample"
 
-    @MainActor
     static func populate(context: ModelContext) {
         let today = Calendar.current.startOfDay(for: .now)
         func day(_ offset: Int) -> Date {
@@ -77,7 +76,6 @@ enum SampleData {
     }
 
     /// Removes every item that carries the sample marker, leaving user content untouched.
-    @MainActor
     static func remove(context: ModelContext) {
         let itemDescriptor = FetchDescriptor<PantryItem>()
         if let items = try? context.fetch(itemDescriptor) {
@@ -95,7 +93,6 @@ enum SampleData {
     }
 
     /// True when any sample content is present.
-    @MainActor
     static func isPresent(in context: ModelContext) -> Bool {
         let descriptor = FetchDescriptor<PantryItem>()
         guard let items = try? context.fetch(descriptor) else { return false }
@@ -103,7 +100,6 @@ enum SampleData {
     }
 
     /// An in-memory container preloaded with sample content, for previews.
-    @MainActor
     static func previewContainer() -> ModelContainer {
         let container = PantryModelContainer.makeContainer(inMemory: true)
         populate(context: container.mainContext)

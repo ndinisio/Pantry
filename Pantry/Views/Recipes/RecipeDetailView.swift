@@ -8,7 +8,7 @@ import SwiftData
 /// Changing the servings rescales the quantities in place rather than opening a sheet.
 struct RecipeDetailView: View {
 
-    @Bindable var recipe: Recipe
+    let recipe: Recipe
 
     @Environment(\.modelContext) private var modelContext
     @Environment(AppEnvironment.self) private var appEnvironment

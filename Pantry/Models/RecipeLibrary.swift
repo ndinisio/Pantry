@@ -68,7 +68,6 @@ enum RecipeLibrary {
 
     /// Inserts the library on first launch. Idempotent: existing library recipes are
     /// left alone so the user's saved state and cook counts survive relaunches.
-    @MainActor
     static func installIfNeeded(context: ModelContext, bundle: Bundle = .main) {
         let descriptor = FetchDescriptor<Recipe>()
         let existing = (try? context.fetch(descriptor)) ?? []

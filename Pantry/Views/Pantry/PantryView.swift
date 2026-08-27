@@ -46,6 +46,9 @@ struct PantryView: View {
             .navigationDestination(for: PantryItem.self) { item in
                 PantryItemDetailView(item: item)
             }
+            .navigationDestination(for: Recipe.self) { recipe in
+                RecipeDetailView(recipe: recipe)
+            }
             .confirmationDialog(
                 Text("Remove \(itemPendingDeletion?.name ?? "")?"),
                 isPresented: Binding(

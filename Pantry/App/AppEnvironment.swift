@@ -8,7 +8,6 @@ import SwiftUI
 /// testable and means a preview or a test can hand in a different `AIService` without
 /// touching a single view.
 @Observable
-@MainActor
 final class AppEnvironment {
 
     /// The AI stack. Rebuilt when the developer toggles sample responses.

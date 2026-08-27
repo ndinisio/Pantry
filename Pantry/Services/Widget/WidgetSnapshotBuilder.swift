@@ -6,7 +6,6 @@ import SwiftData
 /// Called after any change that a widget would show — items added or removed,
 /// something cooked, the shopping list edited — rather than on a timer, so the widget
 /// reflects reality without polling.
-@MainActor
 enum WidgetSnapshotBuilder {
 
     static func refresh(context: ModelContext, preferences: PreferenceSnapshot) {

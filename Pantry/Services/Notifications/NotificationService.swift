@@ -1,6 +1,7 @@
 import Foundation
 import UserNotifications
 import Observation
+import OSLog
 
 /// Sparse, useful notifications.
 ///
@@ -9,7 +10,6 @@ import Observation
 /// time the user chooses, and neither is scheduled until permission is granted in
 /// context — never at launch.
 @Observable
-@MainActor
 final class NotificationService {
 
     enum Identifier {

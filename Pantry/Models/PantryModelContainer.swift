@@ -20,7 +20,7 @@ enum PantryModelContainer {
     ])
 
     /// Set when the on-disk store could not be opened, so the UI can say so.
-    private(set) nonisolated(unsafe) static var didFallBackToMemory = false
+    private(set) static var didFallBackToMemory = false
 
     static func makeContainer(inMemory: Bool = false) -> ModelContainer {
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
@@ -40,7 +40,6 @@ enum PantryModelContainer {
     }
 
     /// Fetches the single preferences record, creating it on first launch.
-    @MainActor
     static func preferences(in context: ModelContext) -> UserPreferences {
         let descriptor = FetchDescriptor<UserPreferences>()
         if let existing = try? context.fetch(descriptor).first {

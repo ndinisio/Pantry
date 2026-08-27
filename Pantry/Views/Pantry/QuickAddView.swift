@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import TipKit
 
 /// Adding several things at once.
 ///
@@ -24,7 +25,7 @@ struct QuickAddView: View {
             Form {
                 Section {
                     TextField(
-                        String(localized: "milk\nsix eggs\n500g chicken"),
+                        String(localized: "Milk, six eggs, 500g chicken"),
                         text: $text,
                         axis: .vertical
                     )
