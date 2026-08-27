@@ -181,3 +181,22 @@ enum RecipeTag: String, CaseIterable, Identifiable, Sendable {
         }
     }
 }
+
+extension Sequence where Element == Recipe {
+    /// The recipes that belong in the library.
+    ///
+    /// Generated suggestions the user hasn't saved are excluded: they are materialised
+    /// so cooking mode, servings, sharing and shopping work on them without a parallel
+    /// implementation, but until they are saved they belong only to the suggestion that
+    /// produced them — surfacing them on Home or in the library would look like
+    /// recipes appearing from nowhere.
+    var browsable: [Recipe] {
+        filter { $0.origin != .generated || $0.isSaved }
+    }
+
+    /// Generated suggestions the user never saved and hasn't looked at for a while.
+    func staleSuggestions(olderThan days: Int = 7, now: Date = .now) -> [Recipe] {
+        let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: now) ?? now
+        return filter { $0.origin == .generated && !$0.isSaved && $0.dateCreated < cutoff }
+    }
+}

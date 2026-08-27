@@ -42,7 +42,7 @@ struct HomeView: View {
         query.appetite = .useWhatIHave
         query.maxTotalMinutes = appEnvironment.preferences.maxCookingTimeMinutes
         let ready = RecipeMatcher.match(
-            recipes: recipes,
+            recipes: recipes.browsable,
             inventory: items,
             query: query,
             preferences: appEnvironment.preferences,
@@ -55,7 +55,7 @@ struct HomeView: View {
         var fallback = RecipeQuery()
         fallback.appetite = .almostNoShopping
         return RecipeMatcher.match(
-            recipes: recipes,
+            recipes: recipes.browsable,
             inventory: items,
             query: fallback,
             preferences: appEnvironment.preferences,

@@ -4,6 +4,65 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.0 — Consistency pass and housekeeping
+
+**Fixed**
+
+- Every screen that ranks recipes now uses the same definition of "the library".
+  Home, item detail, What Can I Make, insights, reminders and the widget were each
+  filtering (or not filtering) unsaved generated suggestions differently, so a recipe
+  the user never saved could appear on Home as though it had always been there. One
+  `browsable` filter, used everywhere.
+
+**Added**
+
+- Generated recipes the user never saved are swept after a week on launch, so the
+  store does not quietly fill up with suggestions nobody wanted. They can still be
+  cleared on demand from More → Data.
+
+---
+
+## v0.9 — Ingredient matching, quantity parsing and unit guessing
+
+**Fixed**
+
+- Ingredient matching used plain substring containment, so "egg" matched "eggplant",
+  "corn" matched "cornflour" and "lime" matched "limeade". Matching is on whole words
+  now, which keeps the case that matters — pantry "chicken" satisfying a recipe's
+  "chicken breast" — and drops the ones that never should have matched.
+- "a dozen eggs" parsed as one egg: the first number word was consumed and the second
+  ignored. A second number word now multiplies the first.
+- A trailing full stop from a sentence ended up in the item name — "six eggs." became
+  "Eggs." — because the parser keeps dots for decimals.
+- Unit guessing matched liquid names as substrings, so "boiled eggs" was measured in
+  millilitres because "boiled" contains "oil".
+- Added the descriptive words the normaliser was missing (finely, roughly, thinly,
+  coarsely, freshly), which were being treated as part of the food's name.
+
+---
+
+## v0.8 — Design review pass
+
+**Fixed**
+
+- An alert announced "Added to Shopping" after adding missing ingredients. Using an
+  alert for a success message teaches people to dismiss alerts without reading them.
+  The action confirms in place now, where the button was.
+- Ticking items off the shopping list threw a confirmation dialog per item asking
+  whether to move it to the pantry — exactly wrong for someone holding a basket.
+  Ticking off is uninterrupted, and moving what you bought into the pantry is one
+  deliberate action afterwards.
+- Recipes had both "For You" and "Ready Now", which overlapped almost completely.
+- Start Cooking sat inside the section describing the recipe; an action is not a fact
+  about the recipe, so it has its own section.
+- The "use soon" badge was yellow — poor contrast at caption size, and it made an item
+  three days out shout as loudly as one past its date.
+- The unit picker put thirteen options in a menu; a list that long belongs behind a
+  disclosure row.
+- The More tab used a bare ellipsis rather than the conventional overflow symbol.
+
+---
+
 ## v0.7 — Cross-file audit, actor isolation, documentation
 
 **Fixed**

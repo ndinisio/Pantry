@@ -34,9 +34,7 @@ struct RecipesView: View {
 
     /// Generated recipes the user hasn't saved stay out of the library — they are
     /// reachable from the suggestion that produced them until they are saved or swept.
-    private var browsableRecipes: [Recipe] {
-        recipes.filter { $0.origin != .generated || $0.isSaved }
-    }
+    private var browsableRecipes: [Recipe] { recipes.browsable }
 
     private var searchResults: [RecipeMatch] {
         let query = searchText.trimmingCharacters(in: .whitespaces)

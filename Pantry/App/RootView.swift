@@ -40,6 +40,7 @@ struct RootView: View {
             // First launch: put the bundled recipe library in place so the Recipes tab
             // has content with no network and no account.
             RecipeLibrary.installIfNeeded(context: modelContext)
+            sweepStaleSuggestions()
             refreshPreferenceSnapshot()
             refreshWidgetSnapshot()
             await appEnvironment.notifications.refreshAuthorizationStatus()
@@ -64,6 +65,15 @@ struct RootView: View {
     private func refreshPreferenceSnapshot() {
         let record = PantryModelContainer.preferences(in: modelContext)
         appEnvironment.preferences = PreferenceSnapshot(record)
+    }
+
+    /// Generated recipes the user never saved are cleared after a week, so the store
+    /// does not fill up with suggestions nobody wanted.
+    private func sweepStaleSuggestions() {
+        let stale = ((try? modelContext.fetch(FetchDescriptor<Recipe>())) ?? []).staleSuggestions()
+        guard !stale.isEmpty else { return }
+        for recipe in stale { modelContext.delete(recipe) }
+        try? modelContext.save()
     }
 
     private func refreshWidgetSnapshot() {

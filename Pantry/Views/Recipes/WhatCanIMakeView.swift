@@ -41,7 +41,7 @@ struct WhatCanIMakeView: View {
 
     private var matches: [RecipeMatch] {
         RecipeMatcher.match(
-            recipes: recipes,
+            recipes: recipes.browsable,
             inventory: items,
             query: query,
             preferences: appEnvironment.preferences,

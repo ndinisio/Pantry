@@ -26,7 +26,7 @@ struct PantryItemDetailView: View {
     private var windowDays: Int { appEnvironment.preferences.useSoonWindowDays }
 
     private var suggestions: [RecipeMatch] {
-        RecipeMatcher.recipes(using: item, from: allRecipes, inventory: allItems, limit: 4)
+        RecipeMatcher.recipes(using: item, from: allRecipes.browsable, inventory: allItems, limit: 4)
     }
 
     var body: some View {

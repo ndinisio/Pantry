@@ -251,7 +251,7 @@ private struct PlanDayPicker: View {
 
     private var matches: [RecipeMatch] {
         let all = RecipeMatcher.match(
-            recipes: recipes.filter { $0.origin != .generated || $0.isSaved },
+            recipes: recipes.browsable,
             inventory: items,
             query: RecipeQuery(appetite: .happyToShop),
             preferences: appEnvironment.preferences,

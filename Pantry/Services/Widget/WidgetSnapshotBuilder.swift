@@ -25,7 +25,7 @@ enum WidgetSnapshotBuilder {
             .sorted { ($0.expirationDate ?? .distantFuture) < ($1.expirationDate ?? .distantFuture) }
 
         let best = RecipeMatcher.match(
-            recipes: recipes.filter { $0.origin != .generated || $0.isSaved },
+            recipes: recipes.browsable,
             inventory: items,
             query: RecipeQuery(appetite: .useWhatIHave),
             preferences: preferences,

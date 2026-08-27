@@ -83,7 +83,7 @@ struct InventoryInsightsView: View {
 
     private var readyCount: Int {
         RecipeMatcher.match(
-            recipes: recipes,
+            recipes: recipes.browsable,
             inventory: items,
             query: RecipeQuery(appetite: .useWhatIHave),
             preferences: appEnvironment.preferences,

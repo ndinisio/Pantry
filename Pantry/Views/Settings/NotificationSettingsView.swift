@@ -130,7 +130,7 @@ struct NotificationSettingsView: View {
 
         let snapshot = PreferenceSnapshot(preferences)
         let readyTitle = RecipeMatcher.match(
-            recipes: recipes,
+            recipes: recipes.browsable,
             inventory: items,
             query: RecipeQuery(appetite: .useWhatIHave),
             preferences: snapshot,
