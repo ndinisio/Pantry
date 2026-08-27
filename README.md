@@ -434,16 +434,31 @@ Pantry/App  Pantry/Components  Pantry/Intents  Pantry/Models
 Pantry/Resources  Pantry/Services  Pantry/Utilities  Pantry/Views
 ```
 
-Anything else at that level is a leftover — including a **nested `Pantry/Pantry/`**,
-which is what you get when an Xcode-generated source folder is copied or dragged in one
-level too deep. That whole folder can go:
+Anything else at that level is a leftover. The most severe version is an **entire
+second Xcode project created inside the source folder**, which leaves four items:
 
-```bash
-git rm -r "Pantry/Pantry"        # if it is tracked (git status is clean)
-rm -rf "Pantry/Pantry"           # if it is untracked (git status shows it as ??)
+```
+Pantry/Pantry.xcodeproj/     a second .xcodeproj
+Pantry/Pantry/               its sources — PantryApp.swift, ContentView.swift, Item.swift, Assets.xcassets
+Pantry/PantryTests/          its unit tests
+Pantry/PantryUITests/        its UI tests
 ```
 
-If the leftovers are loose files rather than a nested folder, the usual set is:
+All four get compiled into this app's target. Note that **this project's own test folders
+live at the repository root**, not inside `Pantry/` — so `Pantry/PantryTests` is always a
+leftover, while `./PantryTests` is real.
+
+These are usually untracked, so `git rm` will fail with "pathspec did not match any
+files". Move them out rather than deleting outright, so the step is reversible until the
+build is green:
+
+```bash
+mkdir -p ~/Desktop/pantry-template-backup
+mv Pantry/Pantry.xcodeproj Pantry/Pantry Pantry/PantryTests Pantry/PantryUITests \
+   ~/Desktop/pantry-template-backup/
+```
+
+If the leftovers are loose files rather than a nested project, the usual set is:
 
 ```
 Pantry/PantryApp.swift          ← delete (the real one is Pantry/App/PantryApp.swift)

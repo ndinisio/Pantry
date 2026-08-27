@@ -4,6 +4,21 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.3 — Cover the nested-Xcode-project case
+
+**Changed**
+
+- Troubleshooting now covers the most severe variant of the duplicate-file failure: an
+  entire second Xcode project created inside `Pantry/`, which leaves a nested
+  `.xcodeproj`, sources, and test folders that all get compiled into this app's target.
+  Notes that this project's own test folders live at the repository root, so
+  `Pantry/PantryTests` is always a leftover while `./PantryTests` is real, and that these
+  files are typically untracked — so `git rm` fails and they have to be moved or deleted
+  directly. Recommends moving them aside rather than deleting, so the step stays
+  reversible until the build is green.
+
+---
+
 ## v1.2 — Name the nested-folder case in troubleshooting
 
 **Changed**
