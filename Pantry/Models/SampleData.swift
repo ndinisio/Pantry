@@ -23,7 +23,7 @@ enum SampleData {
             PantryItem(name: "Chicken Breast", category: .meatAndFish, quantity: 500, unit: .gram,
                        expirationDate: day(1), location: .fridge, notes: marker),
             PantryItem(name: "Greek Yogurt", category: .dairy, quantity: 500, unit: .gram,
-                       expirationDate: day(6), location: .fridge, isOpened: true, notes: marker),
+                       expirationDate: day(6), location: .fridge, notes: marker, isOpened: true),
             PantryItem(name: "Rice", category: .grains, quantity: 1, unit: .kilogram,
                        expirationDate: day(300), location: .cupboard, notes: marker),
             PantryItem(name: "Pasta", category: .grains, quantity: 500, unit: .gram,
@@ -39,7 +39,7 @@ enum SampleData {
             PantryItem(name: "Olive Oil", category: .saucesAndCondiments, quantity: 500, unit: .millilitre,
                        location: .cupboard, notes: marker),
             PantryItem(name: "Soy Sauce", category: .saucesAndCondiments, quantity: 250, unit: .millilitre,
-                       location: .cupboard, isOpened: true, notes: marker),
+                       location: .cupboard, notes: marker, isOpened: true),
             PantryItem(name: "Garlic", category: .produce, quantity: 1, unit: .piece,
                        expirationDate: day(28), location: .counter, notes: marker),
             PantryItem(name: "Onions", category: .produce, quantity: 4, unit: .piece,
@@ -100,6 +100,10 @@ enum SampleData {
     }
 
     /// An in-memory container preloaded with sample content, for previews.
+    ///
+    /// Isolated because it reaches for `mainContext` directly. The helpers above take a
+    /// context as a parameter and so stay free of any isolation of their own.
+    @MainActor
     static func previewContainer() -> ModelContainer {
         let container = PantryModelContainer.makeContainer(inMemory: true)
         populate(context: container.mainContext)

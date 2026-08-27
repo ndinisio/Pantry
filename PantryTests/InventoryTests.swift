@@ -208,6 +208,7 @@ struct ShoppingSuggestionTests {
     }
 }
 
+@MainActor
 @Suite("Inventory service")
 struct InventoryServiceTests {
 
