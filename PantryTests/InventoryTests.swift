@@ -320,11 +320,13 @@ struct InventoryServiceTests {
     @Test("The summary counts what the Home screen and the widget display")
     func summarisesInventory() {
         let (service, _) = makeService()
-        service.add(PantryItem(name: "Spinach", category: .produce, location: .fridge,
-                               expirationDate: Calendar.current.date(byAdding: .day, value: 1, to: .now)))
+        service.add(PantryItem(name: "Spinach", category: .produce,
+                               expirationDate: Calendar.current.date(byAdding: .day, value: 1, to: .now),
+                               location: .fridge))
         service.add(PantryItem(name: "Rice", category: .grains, location: .cupboard))
-        service.add(PantryItem(name: "Old Yoghurt", category: .dairy, location: .fridge,
-                               expirationDate: Calendar.current.date(byAdding: .day, value: -2, to: .now)))
+        service.add(PantryItem(name: "Old Yoghurt", category: .dairy,
+                               expirationDate: Calendar.current.date(byAdding: .day, value: -2, to: .now),
+                               location: .fridge))
 
         let summary = service.counts()
         #expect(summary.totalItems == 3)
