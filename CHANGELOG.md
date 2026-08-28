@@ -4,71 +4,45 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
-## v1.11 — App icon wiring, accent colour, widget assets
+## v1.12 — Icon rename settled on both sides
 
 **Fixed**
 
-- The icon document was `Appicon.icon` while `ASSETCATALOG_COMPILER_APPICON_NAME` is
-  `AppIcon`. macOS is case-insensitive so it appeared to work locally, but git is not,
-  and neither is a case-sensitive build machine. Renamed to `AppIcon.icon`.
-- `AccentColor.colorset` had been deleted while four build settings still referenced it,
-  across both the app and the widget. The app had silently lost its green tint and fallen
-  back to system blue, with a dangling-reference warning behind it. Restored.
+- The `Appicon.icon` → `AppIcon.icon` rename had been made independently in the
+  repository and on the authoring Mac. Both are the same change, so the merge was clean,
+  but the case-only rename is worth recording: git tracks case and macOS does not, so the
+  same name can be right in one and wrong in the other at the same time. That is why
+  `git add Pantry/Resources/AppIcon.icon` silently matched nothing while `ls` showed the
+  file — the two disagreed about what it was called.
+
+---
+
+## v1.11 — App icon name, accent colour, widget assets
+
+**Fixed**
+
+- `ASSETCATALOG_COMPILER_APPICON_NAME` is `AppIcon`, but the Icon Composer document had
+  landed as `Appicon.icon` — lowercase `i`. The asset compiler found no icon stack by
+  that name and failed the build outright. macOS being case-insensitive is what made it
+  look fine locally; git and a case-sensitive build machine both disagree. Renamed via a
+  temporary name, which is what a case-only rename needs in order to survive a
+  case-insensitive checkout.
+
+- Restored `Assets.xcassets/AccentColor.colorset`, removed alongside the empty
+  `AppIcon.appiconset` when the Icon Composer icon landed. It was not an unused
+  placeholder: four build settings still name it and a dozen views reference
+  `Color.accentColor`. Without it the app silently fell back to the system blue tint
+  instead of Pantry's green — a change nothing asked for and nothing reported, because a
+  missing accent colour does not warn.
+
 - The widget target referenced `AccentColor` but had no asset catalog of its own. It has
-  one now, carrying the same colour, so the widget matches the app and the reference
-  resolves.
+  one now carrying the same colour, so the widget matches the app rather than drifting,
+  and the reference resolves. `PantryWidgets` is a synchronized group, so the catalog
+  needed no project-file change.
 
 ---
 
-## v1.10 — Xcode work: widget extension, entitlements, string catalog, privacy manifest
-
-**Added**
-
-- The widget extension target, with App Group entitlements on both it and the app, so
-  the widget can read the pantry snapshot.
-- `WidgetSnapshotStore.swift` moved to `Shared/`, compiled into both targets rather than
-  living under one of them, with the app group identifier aligned across the code and
-  both entitlements files.
-- A privacy manifest, and a string catalog containing every localisable string in the
-  app — the payoff of `SWIFT_EMIT_LOC_STRINGS` and `LOCALIZATION_PREFERS_STRING_CATALOGS`
-  having been set from the start.
-- The app icon, authored in Icon Composer.
-
----
-
-## v1.9 — Add the Pantry app icon
-
-**Added**
-
-- `AppIcon.icon`, an Icon Composer document.
-
----
-
-## v1.6 — Fix remaining argument-order errors in the inventory tests
-
-**Fixed**
-
-- Two test call sites passed `location` before `expirationDate`. Rather than fixing only
-  the two the compiler reported — it stops at the first failing file — every
-  `PantryItem`, `ShoppingItem`, `Recipe` and `RecipeIngredient` construction in the
-  project was swept against its initialiser's declared order.
-
----
-
-## v1.5 — First compile errors: argument order and mainContext isolation
-
-**Fixed**
-
-- Two sample-data call sites passed `isOpened` before `notes`, which the initialiser
-  declares the other way round.
-- `ModelContainer.mainContext` is main-actor isolated, so `SampleData.previewContainer()`
-  and the inventory test suite needed isolating. The helpers they call take a
-  `ModelContext` as a parameter and stay free of isolation of their own — a function
-  given a context can run anywhere, a function that fetches the main one cannot.
-
----
-
-## v1.8 — One project, and a widget that actually ships
+## v1.10 — One project, and a widget that actually ships
 
 **Fixed**
 
@@ -124,6 +98,24 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
+## v1.9 — Add the Pantry app icon
+
+**Added**
+
+- `AppIcon.icon`, an Icon Composer document.
+
+---
+
+## v1.8 — Make room for the Icon Composer app icon
+
+**Removed**
+
+- The empty `AppIcon.appiconset` placeholder. An appiconset and an Icon Composer `.icon`
+  document called `AppIcon` both claim `ASSETCATALOG_COMPILER_APPICON_NAME`, so keeping
+  both is ambiguous, and the empty set warned on every build regardless.
+
+---
+
 ## v1.7 — Choose which nutrients to show
 
 **Added**
@@ -151,6 +143,30 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
   saturates or salt will show nothing for them, which the footer explains; inventing
   fifty-four figures to fill the gap would have made the panel look complete while being
   no more truthful.
+
+---
+
+## v1.6 — Fix remaining argument-order errors in the inventory tests
+
+**Fixed**
+
+- Two test call sites passed `location` before `expirationDate`. Rather than fixing only
+  the two the compiler reported — it stops at the first failing file — every
+  `PantryItem`, `ShoppingItem`, `Recipe` and `RecipeIngredient` construction in the
+  project was swept against its initialiser's declared order.
+
+---
+
+## v1.5 — First compile errors: argument order and mainContext isolation
+
+**Fixed**
+
+- Two sample-data call sites passed `isOpened` before `notes`, which the initialiser
+  declares the other way round.
+- `ModelContainer.mainContext` is main-actor isolated, so `SampleData.previewContainer()`
+  and the inventory test suite needed isolating. The helpers they call take a
+  `ModelContext` as a parameter and stay free of isolation of their own — a function
+  given a context can run anywhere, a function that fetches the main one cannot.
 
 ---
 
