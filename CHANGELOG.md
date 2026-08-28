@@ -4,7 +4,27 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
-## v1.8 — One project, and a widget that actually ships
+## v1.11 — Fix the app icon name and restore the accent colour
+
+**Fixed**
+
+- The build was broken on `main`: `ASSETCATALOG_COMPILER_APPICON_NAME` is `AppIcon`, but
+  the Icon Composer document had landed as `Appicon.icon` — lowercase `i`. The asset
+  compiler found no icon by that name and failed the build outright. Renamed to
+  `AppIcon.icon`, which is what both the build setting and the README already said. On a
+  case-insensitive filesystem that rename needs two `git mv` steps via a temporary name,
+  or git rejects it as an invalid argument.
+
+- Restored `Assets.xcassets/AccentColor.colorset`, removed alongside the empty
+  `AppIcon.appiconset` when the Icon Composer icon landed. It was not an unused
+  placeholder: `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` still names it, and a
+  dozen views reference `Color.accentColor`. Without it the whole app silently fell back
+  to the system blue tint instead of Pantry's green — a change nothing asked for and
+  nothing reported, because a missing accent colour does not warn.
+
+---
+
+## v1.10 — One project, and a widget that actually ships
 
 **Fixed**
 
