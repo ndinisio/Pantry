@@ -4,27 +4,71 @@ All meaningful changes to Pantry, newest first. Versions match commit labels.
 
 ---
 
-## v1.11 — Fix the app icon name and restore the accent colour
+## v1.11 — App icon wiring, accent colour, widget assets
 
 **Fixed**
 
-- The build was broken on `main`: `ASSETCATALOG_COMPILER_APPICON_NAME` is `AppIcon`, but
-  the Icon Composer document had landed as `Appicon.icon` — lowercase `i`. The asset
-  compiler found no icon by that name and failed the build outright. Renamed to
-  `AppIcon.icon`, which is what both the build setting and the README already said. On a
-  case-insensitive filesystem that rename needs two `git mv` steps via a temporary name,
-  or git rejects it as an invalid argument.
-
-- Restored `Assets.xcassets/AccentColor.colorset`, removed alongside the empty
-  `AppIcon.appiconset` when the Icon Composer icon landed. It was not an unused
-  placeholder: `ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME` still names it, and a
-  dozen views reference `Color.accentColor`. Without it the whole app silently fell back
-  to the system blue tint instead of Pantry's green — a change nothing asked for and
-  nothing reported, because a missing accent colour does not warn.
+- The icon document was `Appicon.icon` while `ASSETCATALOG_COMPILER_APPICON_NAME` is
+  `AppIcon`. macOS is case-insensitive so it appeared to work locally, but git is not,
+  and neither is a case-sensitive build machine. Renamed to `AppIcon.icon`.
+- `AccentColor.colorset` had been deleted while four build settings still referenced it,
+  across both the app and the widget. The app had silently lost its green tint and fallen
+  back to system blue, with a dangling-reference warning behind it. Restored.
+- The widget target referenced `AccentColor` but had no asset catalog of its own. It has
+  one now, carrying the same colour, so the widget matches the app and the reference
+  resolves.
 
 ---
 
-## v1.10 — One project, and a widget that actually ships
+## v1.10 — Xcode work: widget extension, entitlements, string catalog, privacy manifest
+
+**Added**
+
+- The widget extension target, with App Group entitlements on both it and the app, so
+  the widget can read the pantry snapshot.
+- `WidgetSnapshotStore.swift` moved to `Shared/`, compiled into both targets rather than
+  living under one of them, with the app group identifier aligned across the code and
+  both entitlements files.
+- A privacy manifest, and a string catalog containing every localisable string in the
+  app — the payoff of `SWIFT_EMIT_LOC_STRINGS` and `LOCALIZATION_PREFERS_STRING_CATALOGS`
+  having been set from the start.
+- The app icon, authored in Icon Composer.
+
+---
+
+## v1.9 — Add the Pantry app icon
+
+**Added**
+
+- `AppIcon.icon`, an Icon Composer document.
+
+---
+
+## v1.6 — Fix remaining argument-order errors in the inventory tests
+
+**Fixed**
+
+- Two test call sites passed `location` before `expirationDate`. Rather than fixing only
+  the two the compiler reported — it stops at the first failing file — every
+  `PantryItem`, `ShoppingItem`, `Recipe` and `RecipeIngredient` construction in the
+  project was swept against its initialiser's declared order.
+
+---
+
+## v1.5 — First compile errors: argument order and mainContext isolation
+
+**Fixed**
+
+- Two sample-data call sites passed `isOpened` before `notes`, which the initialiser
+  declares the other way round.
+- `ModelContainer.mainContext` is main-actor isolated, so `SampleData.previewContainer()`
+  and the inventory test suite needed isolating. The helpers they call take a
+  `ModelContext` as a parameter and stay free of isolation of their own — a function
+  given a context can run anywhere, a function that fetches the main one cannot.
+
+---
+
+## v1.8 — One project, and a widget that actually ships
 
 **Fixed**
 
